@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 
 import br.com.uffs.model.PessoaFisica;
+import br.com.uffs.util.DbUtil;
 
 public class PessoaFisicaSemJpaDAO implements Serializable {
 
@@ -27,14 +28,21 @@ public class PessoaFisicaSemJpaDAO implements Serializable {
 	    	ResultSet rs = null;
 	    	try {
 				con = this.ds.getConnection();
-				ps = con.prepareStatement("SELECT * FROM PESSOAFISICA WHERE IDPESSOAFISICA = ?");
+				ps = con.prepareStatement(new QueryPessoaFisica().findById());
 				ps.setLong(1, id);
 				rs = ps.executeQuery();
 				if (rs.next()) {
-					u.setIdPessoaFisica(id);
-					u.setEmail(rs.getString("email"));
-					u.setUsuario(rs.getString("usuario"));
-					u.setPermissoes(listPermissoesUsuario(u));
+					u.setIdPessoaFisica(rs.getLong("IDPESSOAFISICA"));
+					u.setNome(rs.getString("NOME"));
+					u.setNomeSocial(rs.getString("NOMESOCIAL"));
+				    u.setCpf(rs.getString("CPF"));
+				    u.setAltura(rs.getBigDecimal("ALTURA"));
+				    u.setMassa(rs.getBigDecimal("MASSA"));
+				    u.setGenero(rs.getString("GENERO"));
+				    u.setIdade(rs.getLong("IDADE"));
+				    u.setEmail(rs.getString("EMAIL"));
+				    u.setTelefone(rs.getString("TELEFONE"));
+				    u.setEndereco(rs.getString("ENDERECO"));
 				}
 			} catch (SQLException e) {e.printStackTrace();
 			} finally {
@@ -46,21 +54,28 @@ public class PessoaFisicaSemJpaDAO implements Serializable {
 	    }
 	
 	 public List<PessoaFisica> listAll() {
-	    	List<PessoaFisica> usuarios = new ArrayList<PessoaFisica>();
+	    	List<PessoaFisica> pessoaFisicaList = new ArrayList<PessoaFisica>();
 	    	Connection con = null;
 	    	PreparedStatement ps = null;
 	    	ResultSet rs = null;
 	    	try {
 				con = this.ds.getConnection();
-				ps = con.prepareStatement("SELECT id_usuario, usuario, email FROM usuario");
+				ps = con.prepareStatement(new QueryPessoaFisica().getAllPessoaFisica());
 				rs = ps.executeQuery();
 				while (rs.next()) {
 					PessoaFisica u = new PessoaFisica();
-					u.setEmail(rs.getString("email"));
-					u.setId(rs.getInt("id_usuario"));
-					u.setUsuario(rs.getString("usuario"));
-					u.setPermissoes(listPermissoesUsuario(u));
-					usuarios.add(u);
+					u.setIdPessoaFisica(rs.getLong("IDPESSOAFISICA"));
+					u.setNome(rs.getString("NOME"));
+					u.setNomeSocial(rs.getString("NOMESOCIAL"));
+				    u.setCpf(rs.getString("CPF"));
+				    u.setAltura(rs.getBigDecimal("ALTURA"));
+				    u.setMassa(rs.getBigDecimal("MASSA"));
+				    u.setGenero(rs.getString("GENERO"));
+				    u.setIdade(rs.getLong("IDADE"));
+				    u.setEmail(rs.getString("EMAIL"));
+				    u.setTelefone(rs.getString("TELEFONE"));
+				    u.setEndereco(rs.getString("ENDERECO"));
+				    pessoaFisicaList.add(u);
 				}
 			} catch (SQLException e) {e.printStackTrace();
 			} finally {
@@ -68,7 +83,6 @@ public class PessoaFisicaSemJpaDAO implements Serializable {
 				DbUtil.closePreparedStatement(ps);
 				DbUtil.closeConnection(con);
 			}
-	        return usuarios;
+	        return pessoaFisicaList;
 	    }
-	
 }
