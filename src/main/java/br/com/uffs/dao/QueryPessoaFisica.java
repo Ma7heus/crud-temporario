@@ -20,5 +20,14 @@ public class QueryPessoaFisica {
 
 		return getAllPessoaFisica() + query;
 	}
+	
+	public String insert() {
+		StringBuilder query = new StringBuilder();
+		
+		query.append(" INSERT INTO PESSOAFISICA ( NOME, NOMESOCIAL, CPF, ALTURA, MASSA, GENERO, IDADE, EMAIL, TELEFONE, ENDERECO)  ");
+		query.append(" VALUES ( ? , ?, ?, ?, ?, ?, ?, ?, ?, ? ) ");
+		
+		return query.toString();
+	}
 
 }

@@ -85,4 +85,50 @@ public class PessoaFisicaSemJpaDAO implements Serializable {
 			}
 	        return pessoaFisicaList;
 	    }
+	 
+	 
+
+	public void deletar(Long idPessoaFisica) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void cadastrar(PessoaFisica pessoaFisica) {
+    	Connection con = null;
+    	PreparedStatement ps = null;
+    	PreparedStatement ps2 = null;
+    	ResultSet rs = null;
+    	try {
+	    	con = this.ds.getConnection();
+	    	con.setAutoCommit(false);
+	    	try {				
+				ps = con.prepareStatement(new QueryPessoaFisica().insert());
+				ps.setString(1, pessoaFisica.getNome());
+				ps.setString(2, pessoaFisica.getNomeSocial());
+				ps.setString(3, pessoaFisica.getCpf());
+				ps.setBigDecimal(4, pessoaFisica.getAltura());
+				ps.setBigDecimal(5, pessoaFisica.getMassa());
+				ps.setString(6, pessoaFisica.getGenero());
+				ps.setLong(7, pessoaFisica.getIdade());
+				ps.setString(8, pessoaFisica.getEmail());
+				ps.setString(9, pessoaFisica.getTelefone());
+				ps.setString(10, pessoaFisica.getEndereco());
+				rs = ps.executeQuery();
+				rs.next();
+				pessoaFisica.setIdPessoaFisica(rs.getLong("IDPESSOAFISICA"));
+								
+				con.commit();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				con.rollback();
+			}
+    	} catch (SQLException e) {e.printStackTrace();
+    	} finally {
+			DbUtil.closeResultSet(rs);
+			DbUtil.closePreparedStatement(ps);
+			DbUtil.closePreparedStatement(ps2);
+			DbUtil.closeConnection(con);
+		}
+	}
+	
 }
