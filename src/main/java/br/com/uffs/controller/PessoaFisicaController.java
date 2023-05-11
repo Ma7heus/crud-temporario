@@ -59,13 +59,6 @@ public class PessoaFisicaController implements Serializable {
 		pessoaFisicaDAO.cadastrar(pessoaFisica);
 	}
 	
-	
-	
-	
-	
-	
-	
-
 	public List<PessoaFisica> getPessoaFisicaList() {
 		return pessoaFisicaList;
 	}
