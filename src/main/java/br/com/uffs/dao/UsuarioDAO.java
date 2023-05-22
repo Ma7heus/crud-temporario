@@ -129,47 +129,47 @@ package br.com.uffs.dao;
 //		}
 //        return permissoes;
 //    }
-//    
-//    public Boolean insert(Usuario u) {
-//    	Boolean resultado = false;
-//    	Connection con = null;
-//    	PreparedStatement ps = null;
-//    	PreparedStatement ps2 = null;
-//    	ResultSet rs = null;
-//    	try {
-//	    	con = this.ds.getConnection();
-//	    	con.setAutoCommit(false);
-//	    	try {				
-//				ps = con.prepareStatement("INSERT INTO usuario (usuario, email, senha) VALUES (?, ?, ?) RETURNING id_usuario");
-//				ps.setString(1, u.getUsuario());
-//				ps.setString(2, u.getEmail());
-//				ps.setString(3, u.getSenha());
-//				
-//				rs = ps.executeQuery();
-//				rs.next();
-//				u.setId(rs.getInt("id_usuario"));
-//				
-//				ps2 = con.prepareStatement("INSERT INTO permissao (id_usuario, id_tipo_permissao) VALUES (?, ?)");
-//				ps2.setInt(1, u.getId());
-//				for (TipoPermissao tp: u.getPermissoes()) {
-//					ps2.setInt(2, tp.getId());
-//					ps2.execute();
-//				}
-//				con.commit();
-//				resultado = true;
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//				con.rollback();
-//			}
-//    	} catch (SQLException e) {e.printStackTrace();
-//    	} finally {
-//			DbUtil.closeResultSet(rs);
-//			DbUtil.closePreparedStatement(ps);
-//			DbUtil.closePreparedStatement(ps2);
-//			DbUtil.closeConnection(con);
-//		}
-//    	return resultado;
-//    }
+    
+    public Boolean insert(Usuario u) {
+    	Boolean resultado = false;
+    	Connection con = null;
+    	PreparedStatement ps = null;
+    	PreparedStatement ps2 = null;
+    	ResultSet rs = null;
+    	try {
+	    	con = this.ds.getConnection();
+	    	con.setAutoCommit(false);
+	    	try {				
+				ps = con.prepareStatement("INSERT INTO usuario (usuario, email, senha) VALUES (?, ?, ?) RETURNING id_usuario");
+				ps.setString(1, u.getUsuario());
+				ps.setString(2, u.getEmail());
+				ps.setString(3, u.getSenha());
+				
+				rs = ps.executeQuery();
+				rs.next();
+				u.setId(rs.getInt("id_usuario"));
+				
+				ps2 = con.prepareStatement("INSERT INTO permissao (id_usuario, id_tipo_permissao) VALUES (?, ?)");
+				ps2.setInt(1, u.getId());
+				for (TipoPermissao tp: u.getPermissoes()) {
+					ps2.setInt(2, tp.getId());
+					ps2.execute();
+				}
+				con.commit();
+				resultado = true;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				con.rollback();
+			}
+    	} catch (SQLException e) {e.printStackTrace();
+    	} finally {
+			DbUtil.closeResultSet(rs);
+			DbUtil.closePreparedStatement(ps);
+			DbUtil.closePreparedStatement(ps2);
+			DbUtil.closeConnection(con);
+		}
+    	return resultado;
+    }
 //    
 //    public Boolean update(Usuario u) {
 //    	Boolean resultado = false;

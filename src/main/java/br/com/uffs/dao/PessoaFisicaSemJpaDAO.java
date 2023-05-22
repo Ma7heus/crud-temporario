@@ -86,49 +86,130 @@ public class PessoaFisicaSemJpaDAO implements Serializable {
 	        return pessoaFisicaList;
 	    }
 	 
+//	public void cadastrar(PessoaFisica pessoaFisica) {
+//    	Connection con = null;
+//    	PreparedStatement ps = null;
+//    	PreparedStatement ps2 = null;
+//    	ResultSet rs = null;
+//    	try {
+//	    	con = this.ds.getConnection();
+//	    	con.setAutoCommit(false);
+//	    	try {				
+//				ps = con.prepareStatement(new QueryPessoaFisica().insert());
+//				ps.setString(1, pessoaFisica.getNome());
+//				ps.setString(2, pessoaFisica.getNomeSocial());
+//				ps.setString(3, pessoaFisica.getCpf());
+//				ps.setBigDecimal(4, pessoaFisica.getAltura());
+//				ps.setBigDecimal(5, pessoaFisica.getMassa());
+//				ps.setString(6, pessoaFisica.getGenero());
+//				ps.setLong(7, pessoaFisica.getIdade());
+//				ps.setString(8, pessoaFisica.getEmail());
+//				ps.setString(9, pessoaFisica.getTelefone());
+//				ps.setString(10, pessoaFisica.getEndereco());
+//				
+//				rs = ps.executeQuery();
+//				
+//				rs.next();
+//			
+//				pessoaFisica.setIdPessoaFisica(rs.getLong("IDPESSOAFISICA"));
+//								
+//				con.commit();
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//				con.rollback();
+//			}
+//    	} catch (SQLException e) {e.printStackTrace();
+//    	} finally {
+//			DbUtil.closeResultSet(rs);
+//			DbUtil.closePreparedStatement(ps);
+//			DbUtil.closePreparedStatement(ps2);
+//			DbUtil.closeConnection(con);
+//		}
+//	}
 	 
+	 public Boolean cadastrar(PessoaFisica pessoaFisica) {
+		    Boolean resultado = false;
+		    Connection con = null;
+		    PreparedStatement ps = null;
+		    ResultSet rs = null;
+		    try {
+		        con = this.ds.getConnection();
+		        con.setAutoCommit(false);
+		        try {
+		            ps = con.prepareStatement("INSERT INTO PESSOAFISICA (nome, nomesocial, cpf, altura, massa, genero, idade, email, telefone, endereco) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING IDPESSOAFISICA");
+		            ps.setString(1, pessoaFisica.getNome());
+		            ps.setString(2, pessoaFisica.getNomeSocial());
+		            ps.setString(3, pessoaFisica.getCpf());
+		            ps.setBigDecimal(4, pessoaFisica.getAltura());
+		            ps.setBigDecimal(5, pessoaFisica.getMassa());
+		            ps.setString(6, pessoaFisica.getGenero());
+		            ps.setLong(7, pessoaFisica.getIdade());
+		            ps.setString(8, pessoaFisica.getEmail());
+		            ps.setString(9, pessoaFisica.getTelefone());
+		            ps.setString(10, pessoaFisica.getEndereco());
 
-	public void deletar(Long idPessoaFisica) {
-		// TODO Auto-generated method stub
-		
-	}
+		            rs = ps.executeQuery();
+		            rs.next();
+		            pessoaFisica.setIdPessoaFisica(rs.getLong("IDPESSOAFISICA"));
 
-	public void cadastrar(PessoaFisica pessoaFisica) {
-    	Connection con = null;
-    	PreparedStatement ps = null;
-    	PreparedStatement ps2 = null;
-    	ResultSet rs = null;
-    	try {
-	    	con = this.ds.getConnection();
-	    	con.setAutoCommit(false);
-	    	try {				
-				ps = con.prepareStatement(new QueryPessoaFisica().insert());
-				ps.setString(1, pessoaFisica.getNome());
-				ps.setString(2, pessoaFisica.getNomeSocial());
-				ps.setString(3, pessoaFisica.getCpf());
-				ps.setBigDecimal(4, pessoaFisica.getAltura());
-				ps.setBigDecimal(5, pessoaFisica.getMassa());
-				ps.setString(6, pessoaFisica.getGenero());
-				ps.setLong(7, pessoaFisica.getIdade());
-				ps.setString(8, pessoaFisica.getEmail());
-				ps.setString(9, pessoaFisica.getTelefone());
-				ps.setString(10, pessoaFisica.getEndereco());
-				rs = ps.executeQuery();
-				rs.next();
-				pessoaFisica.setIdPessoaFisica(rs.getLong("IDPESSOAFISICA"));
-								
-				con.commit();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				con.rollback();
-			}
-    	} catch (SQLException e) {e.printStackTrace();
-    	} finally {
-			DbUtil.closeResultSet(rs);
-			DbUtil.closePreparedStatement(ps);
-			DbUtil.closePreparedStatement(ps2);
-			DbUtil.closeConnection(con);
+		            con.commit();
+		            resultado = true;
+		        } catch (SQLException e) {
+		            e.printStackTrace();
+		            con.rollback();
+		        }
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    } finally {
+		        DbUtil.closeResultSet(rs);
+		        DbUtil.closePreparedStatement(ps);
+		        DbUtil.closeConnection(con);
+		    }
+		    return resultado;
 		}
+
+	
+	public void deletar(Long id) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    try {
+	        con = this.ds.getConnection();
+	        ps = con.prepareStatement("DELETE FROM PessoaFisica WHERE IDPESSOAFISICA = ?");
+	        ps.setLong(1, id);
+	        ps.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        DbUtil.closePreparedStatement(ps);
+	        DbUtil.closeConnection(con);
+	    }
 	}
+
+	public void atualizar(PessoaFisica pessoaFisica) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    try {
+	        con = this.ds.getConnection();
+	        ps = con.prepareStatement("UPDATE PessoaFisica SET NOME=?, NOMESOCIAL=?, CPF=?, ALTURA=?, MASSA=?, GENERO=?, IDADE=?, EMAIL=?, TELEFONE=?, ENDERECO=? WHERE IDPESSOAFISICA=?");
+	        ps.setString(1, pessoaFisica.getNome());
+	        ps.setString(2, pessoaFisica.getNomeSocial());
+	        ps.setString(3, pessoaFisica.getCpf());
+	        ps.setBigDecimal(4, pessoaFisica.getAltura());
+	        ps.setBigDecimal(5, pessoaFisica.getMassa());
+	        ps.setString(6, pessoaFisica.getGenero());
+	        ps.setLong(7, pessoaFisica.getIdade());
+	        ps.setString(8, pessoaFisica.getEmail());
+	        ps.setString(9, pessoaFisica.getTelefone());
+	        ps.setString(10, pessoaFisica.getEndereco());
+	        ps.setLong(11, pessoaFisica.getIdPessoaFisica());
+	        ps.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        DbUtil.closePreparedStatement(ps);
+	        DbUtil.closeConnection(con);
+	    }
+	}
+
 	
 }

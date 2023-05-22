@@ -27,36 +27,34 @@ public class PessoaFisicaController implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		this.pessoaFisicaList = new ArrayList<>();
-//		PessoaFisica pf = new PessoaFisica();
-//		pf.setNome("Matheus");
-//		pf.setNomeSocial("Matheus Biasi");
-//		pf.setIdade(22L);
-//		pessoaFisicaList.add(pf);
-		
+		this.pessoaFisicaList = new ArrayList<>();		
 		this.pessoaFisicaList = pessoaFisicaDAO.listAll();
-		
 	}
 	
+	// chamadoao clicar no botao salvar
 	public void salvar() {
-		pessoaFisicaDAO.cadastrar(this.pessoaFisica);
-		System.out.println("Cliente salvo nome: " + pessoaFisica.getNome());
-		this.pessoaFisica = new PessoaFisica();
+		Boolean cadastrar = pessoaFisicaDAO.cadastrar(this.pessoaFisica);
+		if(cadastrar) {
+			System.out.println("Cliente salvo nome: " + pessoaFisica.getNome());
+			this.pessoaFisica = new PessoaFisica();
+		}
+		this.pessoaFisicaList = pessoaFisicaDAO.listAll();
 	}
 	
-	public void remover(PessoaFisica cliente) {
+	public void remover() {
 		System.out.println("Remover");
-		pessoaFisicaDAO.deletar(cliente.getIdPessoaFisica());
+		pessoaFisicaDAO.deletar(this.pessoaFisica.getIdPessoaFisica());
 	}
 	
-	public void atualizar(PessoaFisica cliente) {
-		//pessoaFisicaDAO. (cliente);
+	// CHAMADO AO ABRIR DIALOG ATUALIZAR
+	public void atualizar() {
+		System.out.println("Atualizando cliente");
+		this.pessoaFisica = pessoaFisicaDAO.findById(1L);
 	}
 	
+	//chamado ao abrir o dialog
 	public void novoCadastro() {
-		System.out.println("cadastrando novo Cliente");
-		this.pessoaFisica =  new PessoaFisica();
-		pessoaFisicaDAO.cadastrar(pessoaFisica);
+		this.pessoaFisica = new PessoaFisica();
 	}
 	
 	public List<PessoaFisica> getPessoaFisicaList() {
