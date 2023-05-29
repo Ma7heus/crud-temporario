@@ -10,7 +10,15 @@
     <ui:define name="content">
         <h:form id="dialogs">
         	<p:growl id="messages"/>
-	        <p:dialog header="Novo cliente" modal="true"  width="750" height="400"    widgetVar="clienteDialog" responsive="true">   
+	       
+	       <!--DIALOG ADICIONAR CLIENTE-->
+	        <p:dialog 
+	        	header="Novo cliente" 
+	        	modal="true"  
+	        	width="750" 
+	        	height="400"    
+	        	widgetVar="clienteDialog" 
+	        	responsive="true">   
 	           
 	            <p:outputPanel id="usuario-conteudo-dialog" class="ui-fluid">
 	                <p:outputPanel rendered="#{not empty pessoaFisicaController.pessoaFisica}">
@@ -82,7 +90,6 @@
 							</div>
 						</div>
 
-
 						<div class="ui-md-12">
 							<p:outputLabel for="endereco">Endereco</p:outputLabel>
 							<p:inputText id="endereco"
@@ -95,118 +102,156 @@
 	            </p:outputPanel>
 	
 	            <f:facet name="footer">
-	                <p:commandButton value="Salvar" icon="pi pi-check" actionListener="#{pessoaFisicaController.salvar}"
-	                    update="usuario-conteudo-dialog dialogs:messages" process="usuario-conteudo-dialog @this" />
-	                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('clienteDialog').hide()" class="ui-button-secondary" type="button" />
+	                <p:commandButton 
+	                	value="Salvar" 
+	                	icon="pi pi-check" 
+	                	actionListener="#{pessoaFisicaController.salvar}"
+	                    update="usuario-conteudo-dialog dialogs:messages form:dt-usuarios" 
+	                    process="usuario-conteudo-dialog @this" />
+	                <p:commandButton 
+	                	value="Cancelar" 
+	                	icon="pi pi-times" 
+	                	onclick="PF('clienteDialog').hide()" 
+	                	class="ui-button-secondary" 
+	                	type="button" />
 	            </f:facet>
 	        </p:dialog>
 
-	        <p:confirmDialog widgetVar="removerclienteDialog" showEffect="fade" width="300"
-	            message="Desejar remover este usuário?" header="Confirm" severity="warn">
-	            <p:commandButton value="Sim" icon="pi pi-check" actionListener="#{PessoaFisicaController.remover}"
-	                process="@this" oncomplete="PF('removerclienteDialog').hide()" />
-	            <p:commandButton value="Não" type="button" styleClass="ui-button-secondary" icon="pi pi-times" onclick="PF('removerclienteDialog').hide()" />
+			<!--DIALOG REMOVER CLIENTE-->
+	        <p:confirmDialog 
+	        	widgetVar="removerclienteDialog" 
+	        	showEffect="fade" 
+	        	width="300"
+	            message="Desejar remover este usuário?" 
+	            header="Confirm" 
+	            severity="warn">
+	            
+	            <p:commandButton 
+	            	value="Sim" 
+	            	icon="pi pi-check" 
+	            	actionListener="#{pessoaFisicaController.remover}"
+	                process="@this form:dt-usuarios"
+					update="form:dt-usuarios" 
+	                oncomplete="PF('removerclienteDialog').hide()" />
+	            <p:commandButton 
+	            	value="Não" 
+	            	type="button" 
+	            	styleClass="ui-button-secondary" 
+	            	icon="pi pi-times" 
+	            	onclick="PF('removerclienteDialog').hide()" />
 	        </p:confirmDialog>
 		
         </h:form>     
         
-        <!-- Define formulário principal -->  
+        <!-- FORM COM LISTAGEM DOS CLIENTES CADASTRADOS -->  
         <h:form id="form">
             <p:growl id="messages" showDetail="true" />
             
             <p:toolbar>
 	            <p:toolbarGroup>
-	                <p:commandButton value="Novo" icon="pi pi-plus" actionListener="#{pessoaFisicaController.novoCadastro}"
-	                    update=":dialogs:usuario-conteudo-dialog" oncomplete="PF('clienteDialog').show()"
-	                    styleClass="ui-button-success" style="margin-right: .5rem">
+	                <p:commandButton 
+	                	value="Novo" 
+	                	icon="pi pi-plus" 
+	                	actionListener="#{pessoaFisicaController.novoCadastro}"
+	                    update=":dialogs:usuario-conteudo-dialog" 
+	                    oncomplete="PF('clienteDialog').show()"
+	                    styleClass="ui-button-success" 
+	                    style="margin-right: .5rem">
 	                    <p:resetInput target=":dialogs:usuario-conteudo-dialog" />
 	                </p:commandButton>
 	            </p:toolbarGroup>
 	        </p:toolbar>
-	
-	        <p:dataTable id="dt-usuarios" var="pf" value="#{pessoaFisicaController.pessoaFisicaList}">
-	            <f:facet name="header">
-	                <div>
-	                    <span style="font-weight: bold">Clientes</span>
-	                </div>
-	            </f:facet>
-	            
-	            <p:column headerText="Nome">
-	                <h:outputText value="#{pf.nome}" />
-	            </p:column>
-	            
-	            <p:column headerText="Nome Social">
-	                <h:outputText value="#{pf.nomeSocial}" />
-	            </p:column>
-	            
-	            <p:column headerText="Idade">
-	                <h:outputText value="#{pf.idade}" />
-	            </p:column>
-	            
-	           <p:column headerText="CPF">
-	                <h:outputText value="#{pf.cpf}" />
-	            </p:column>
-	            
-	            <p:column headerText="Genero">
-	                <h:outputText value="#{pf.genero}" />
-	            </p:column>
-	            
-	            <p:column headerText="Massa">
-	                <h:outputText value="#{pf.massa}" />
-	            </p:column>
-	            
-				<p:column headerText="Altura">
-	                <h:outputText value="#{pf.altura}" />
-	            </p:column>
-	            
-	            <p:column headerText="E-mail">
-	                <h:outputText value="#{pf.email}" />
-	            </p:column>
-	            
-	            <p:column headerText="Telefone">
-	                <h:outputText value="#{pf.telefone}" />
-	            </p:column>
 
-				<p:column>
-					<f:facet name="header">Opções</f:facet>
-
-					<p:commandButton icon="pi pi-pencil"
-						update=":dialogs:usuario-conteudo-dialog"
-						oncomplete="PF('clienteDialog').show()"
-						actionListener="#{pessoaFisicaController.atualizar}"
-						styleClass="edit-button rounded-button ui-button-success"
-						process="@this">
-						<f:setPropertyActionListener value="#{pf}"
-							target="#{pessoaFisicaController.pessoaFisica}" />
-						<p:resetInput target=":dialogs:usuario-conteudo-dialog" />
-					</p:commandButton>
-
-					<p:commandButton class="ui-button-warning rounded-button"
-						icon="pi pi-trash" process="@this"
-						oncomplete="PF('removerUsuarioDialog').show()">
-						<f:setPropertyActionListener value="#{pf}"
-							target="#{pessoaFisicaController.pessoaFisica}" />
-						<p:confirm header="Confirmação" message="Excluir Cliente?"
-							icon="pi pi-exclamation-triangle" />
-					</p:commandButton>
-
-					<p:confirmDialog widgetVar="removerUsuarioDialog" showEffect="fade"
-						width="300" message="Desejar remover este Cliente]"
-						header="Confirm" severity="warn">
-						
-						<p:commandButton value="Sim" icon="pi pi-check"
-							actionListener="#{pessoaFisicaController.remover}"
-							process="@this" oncomplete="PF('removerUsuarioDialog').hide()" />
-						
-						<p:commandButton value="Não" type="button"
-							styleClass="ui-button-secondary" icon="pi pi-times"
-							onclick="PF('removerUsuarioDialog').hide()" />
-					</p:confirmDialog>
-				</p:column>
+			<!-- PARTE RESPONSAVEL PELO FILTRO-->	
+			<p:outputLabel 
+				class="ui-g"
+				value="Consultar" 
+				for="input_consulta" />
+			<p:inputText 
+				class="ui-md-8"
+				id="input_consulta"
+				value="#{pessoaFisicaController.textoConsulta}" 
+				/>
+			
+			<p:commandButton 
+				style="margin-right: 50px;"
+				value="Filtrar" 
+				icon="pi pi-search"
+				actionListener="#{pessoaFisicaController.filtrar}"
+				update="form:dt-usuarios" process="@this input_consulta" />
 
 
-			</p:dataTable>
-	    </h:form>
+			<p:dataTable id="dt-usuarios" var="pf"
+					value="#{pessoaFisicaController.pessoaFisicaList}">
+					<f:facet name="header">
+						<div>
+							<span style="font-weight: bold">Clientes</span>
+						</div>
+					</f:facet>
+
+					<p:column headerText="Nome">
+						<h:outputText value="#{pf.nome}" />
+					</p:column>
+
+					<p:column headerText="Nome Social">
+						<h:outputText value="#{pf.nomeSocial}" />
+					</p:column>
+
+					<p:column headerText="Idade">
+						<h:outputText value="#{pf.idade} anos" />
+					</p:column>
+
+					<p:column headerText="CPF">
+						<h:outputText value="#{pf.cpf}" />
+					</p:column>
+
+					<p:column headerText="Genero">
+						<h:outputText value="#{pf.genero}" />
+					</p:column>
+
+					<!-- 	            <p:column headerText="Massa"> -->
+					<!-- 	                <h:outputText value="#{pf.massa}" /> -->
+					<!-- 	            </p:column> -->
+
+					<!-- 				<p:column headerText="Altura"> -->
+					<!-- 	                <h:outputText value="#{pf.altura}" /> -->
+					<!-- 	            </p:column> -->
+
+					<p:column headerText="E-mail">
+						<h:outputText value="#{pf.email}" />
+					</p:column>
+
+					<p:column headerText="Telefone">
+						<h:outputText value="#{pf.telefone}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">Opções</f:facet>
+
+						<!--EDITAR USUARIO BOTAO-->
+						<p:commandButton icon="pi pi-pencil"
+							update=":dialogs:usuario-conteudo-dialog"
+							oncomplete="PF('clienteDialog').show()"
+							actionListener="#{pessoaFisicaController.atualizar}"
+							styleClass="edit-button rounded-button ui-button-success"
+							process="@this">
+
+							<f:setPropertyActionListener value="#{pf}"
+								target="#{pessoaFisicaController.pessoaFisica}" />
+							<p:resetInput target=":dialogs:usuario-conteudo-dialog" />
+						</p:commandButton>
+
+						<!--EXCLUIR USUARIO BOTAO-->
+						<p:commandButton icon="pi pi-trash" process="@this"
+							class="rounded-button"
+							oncomplete="PF('removerclienteDialog').show()">
+							<f:setPropertyActionListener value="#{pf}"
+								target="#{pessoaFisicaController.pessoaFisica}" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+		</h:form>
     
     </ui:define>
 </ui:composition>

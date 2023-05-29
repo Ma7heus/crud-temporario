@@ -30,4 +30,32 @@ public class QueryPessoaFisica {
 		return query.toString();
 	}
 
+	public String getFilterQuery(String info) {
+		String infoFiltro = " '%" +info+ "%' ";
+
+		StringBuilder query = new StringBuilder();
+		query.append(" SELECT * FROM PESSOAFISICA WHERE LOWER(NOME) LIKE " + infoFiltro);
+		query.append(" OR LOWER(NOMESOCIAL) LIKE " + infoFiltro);
+		query.append(" OR LOWER(GENERO) LIKE " + infoFiltro);
+		query.append(" OR LOWER(EMAIL) LIKE " + infoFiltro);
+		query.append(" OR LOWER(ENDERECO) LIKE " + infoFiltro);
+		
+		boolean isNumber = isNumeric(info);
+		if(isNumber) {
+			query.append(" OR IDADE = " + info);	
+			query.append(" OR MASSA = " + info);
+			query.append(" OR ALTURA = " + info);
+		}
+       
+		return query.toString();
+    }
+
+    public static boolean isNumeric(String input) {
+        for (char c : input.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
