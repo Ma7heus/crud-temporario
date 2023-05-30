@@ -40,12 +40,12 @@ public class QueryPessoaFisica {
 		query.append(" OR LOWER(EMAIL) LIKE " + infoFiltro);
 		query.append(" OR LOWER(ENDERECO) LIKE " + infoFiltro);
 		
-		boolean isNumber = isNumeric(info);
-		if(isNumber) {
-			query.append(" OR IDADE = " + info);	
-			query.append(" OR MASSA = " + info);
-			query.append(" OR ALTURA = " + info);
-		}
+//		boolean isNumber = isNumeric(info);
+//		if(isNumber) {
+//			query.append(" OR IDADE = " + info);	
+//			query.append(" OR MASSA = " + info);
+//			query.append(" OR ALTURA = " + info);
+//		}
        
 		return query.toString();
     }

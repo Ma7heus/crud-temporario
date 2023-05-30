@@ -162,23 +162,34 @@
 	            </p:toolbarGroup>
 	        </p:toolbar>
 
-			<!-- PARTE RESPONSAVEL PELO FILTRO-->	
-			<p:outputLabel 
-				class="ui-g"
-				value="Consultar" 
-				for="input_consulta" />
-			<p:inputText 
-				class="ui-md-8"
-				id="input_consulta"
-				value="#{pessoaFisicaController.textoConsulta}" 
-				/>
+			<!-- PARTE RESPONSAVEL PELO FILTRO-->
 			
-			<p:commandButton 
-				style="margin-right: 50px;"
-				value="Filtrar" 
-				icon="pi pi-search"
-				actionListener="#{pessoaFisicaController.filtrar}"
-				update="form:dt-usuarios" process="@this input_consulta" />
+
+			
+			<div class="ui-inputgroup">
+				<p:inputText class="ui-md-6" id="input_consulta"
+					placeholder="Digite aqui para pesquisar"
+					value="#{pessoaFisicaController.textoConsulta}" />
+
+				<p:commandButton 
+					style="margin-right: 50px;" 
+					value="Filtrar"
+					icon="pi pi-search"
+					actionListener="#{pessoaFisicaController.filtrar}"
+					update="form:dt-usuarios" process="@this input_consulta" />
+			
+				</div>
+				
+				<p:selectOneMenu 
+					id="txt3" 
+					value="#{pessoaFisicaController.generoSelecionado}" 
+					required="true" 
+					label="Text 3">
+                    <f:selectItem itemLabel="Select One" noSelectionOption="true"/>
+                    <f:selectItem itemLabel="Sigma" itemValue="1"/>
+                    <f:selectItem itemLabel="Woman" itemValue="2"/>
+                    <f:selectItem itemLabel="Outro" itemValue="3"/>
+                </p:selectOneMenu>
 
 
 			<p:dataTable id="dt-usuarios" var="pf"

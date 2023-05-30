@@ -29,6 +29,10 @@ public class PessoaFisicaController implements Serializable {
 	private Boolean isEditando;
 	
 	private String textoConsulta;
+	
+	private String generoSelecionado;
+	
+	private String txt1;
 
 	@PostConstruct
 	public void init() {
@@ -83,11 +87,26 @@ public class PessoaFisicaController implements Serializable {
 	}
 	
 	public void filtrar() {
+		System.out.println(txt1);
+		
 		if(Objects.nonNull(textoConsulta) || textoConsulta != "") {
 			System.out.println("Filtrando dados " + textoConsulta);
 			List<PessoaFisica> listaFiltrada = pessoaFisicaDAO.filtrar(textoConsulta.toLowerCase());
 			this.pessoaFisicaList = listaFiltrada;			
 		}
+	}
+	
+	public List<String> getListaGeneros(String query) {
+		generoSelecionado = query;
+		List<String> generos = new ArrayList<>();
+		String m = "Masculino";
+		String f = "Feminino";
+		String x = "Outro";
+		
+		generos.add(m);
+		generos.add(f);
+		generos.add(x);
+		return generos;
 	}
 	
 	public List<PessoaFisica> getPessoaFisicaList() {
@@ -123,4 +142,21 @@ public class PessoaFisicaController implements Serializable {
 	public void setTextoConsulta(String textoConsulta) {
 		this.textoConsulta = textoConsulta;
 	}
+
+	public String getGeneroSelecionado() {
+		return generoSelecionado;
+	}
+
+	public void setGeneroSelecionado(String generoSelecionado) {
+		this.generoSelecionado = generoSelecionado;
+	}
+
+	public String getTxt1() {
+		return txt1;
+	}
+
+	public void setTxt1(String txt1) {
+		this.txt1 = txt1;
+	}
+	
 }
