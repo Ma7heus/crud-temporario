@@ -177,22 +177,10 @@
 					icon="pi pi-search"
 					actionListener="#{pessoaFisicaController.filtrar}"
 					update="form:dt-usuarios" process="@this input_consulta" />
-			
+
 				</div>
 				
-				<p:selectOneMenu 
-					id="txt3" 
-					value="#{pessoaFisicaController.generoSelecionado}" 
-					required="true" 
-					label="Text 3">
-                    <f:selectItem itemLabel="Select One" noSelectionOption="true"/>
-                    <f:selectItem itemLabel="Sigma" itemValue="1"/>
-                    <f:selectItem itemLabel="Woman" itemValue="2"/>
-                    <f:selectItem itemLabel="Outro" itemValue="3"/>
-                </p:selectOneMenu>
-
-
-			<p:dataTable id="dt-usuarios" var="pf"
+			<p:dataTable id="dt-usuarios" var="pf" 
 					value="#{pessoaFisicaController.pessoaFisicaList}">
 					<f:facet name="header">
 						<div>
@@ -200,23 +188,38 @@
 						</div>
 					</f:facet>
 
-					<p:column headerText="Nome">
+					<p:column 
+						headerText="Nome" 
+						sortBy="#{pf.nome}" 
+						filterBy="#{pf.nome}">
 						<h:outputText value="#{pf.nome}" />
 					</p:column>
 
-					<p:column headerText="Nome Social">
+					<p:column 
+						headerText="Nome Social" 
+						sortBy="#{pf.nomeSocial}" 
+						filterBy="#{pf.nomeSocial}">
 						<h:outputText value="#{pf.nomeSocial}" />
 					</p:column>
 
-					<p:column headerText="Idade">
+					<p:column 
+						headerText="Idade" 
+						sortBy="#{pf.idade}" 
+						filterBy="#{pf.idade}">
 						<h:outputText value="#{pf.idade} anos" />
 					</p:column>
 
-					<p:column headerText="CPF">
+					<p:column 
+						headerText="CPF"
+						sortBy="#{pf.cpf}" 
+						filterBy="#{pf.cpf}">
 						<h:outputText value="#{pf.cpf}" />
 					</p:column>
 
-					<p:column headerText="Genero">
+					<p:column 
+						sortBy="#{pf.genero}" 
+						filterBy="#{pf.genero}"
+						headerText="Genero">
 						<h:outputText value="#{pf.genero}" />
 					</p:column>
 
@@ -228,11 +231,17 @@
 					<!-- 	                <h:outputText value="#{pf.altura}" /> -->
 					<!-- 	            </p:column> -->
 
-					<p:column headerText="E-mail">
+					<p:column 
+						sortBy="#{pf.email}" 
+						filterBy="#{pf.email}"
+						headerText="E-mail">
 						<h:outputText value="#{pf.email}" />
 					</p:column>
 
-					<p:column headerText="Telefone">
+					<p:column 
+						sortBy="#{pf.telefone}" 
+						filterBy="#{pf.telefone}"
+						headerText="Telefone">
 						<h:outputText value="#{pf.telefone}" />
 					</p:column>
 

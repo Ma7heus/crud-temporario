@@ -109,6 +109,10 @@ public class PessoaFisicaController implements Serializable {
 		return generos;
 	}
 	
+	public void opcaoSelecionada() {
+		System.out.println(this.generoSelecionado);
+	}
+	
 	public List<PessoaFisica> getPessoaFisicaList() {
 		return pessoaFisicaList;
 	}
