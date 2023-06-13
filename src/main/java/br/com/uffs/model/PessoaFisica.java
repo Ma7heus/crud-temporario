@@ -12,7 +12,7 @@ import javax.persistence.SequenceGenerator;
 public class PessoaFisica {
 
 	@Id
-	@SequenceGenerator(name = "SEQUENCE_PESSOAFISICA",sequenceName = "IDPESSOAFISICA", allocationSize = 1)
+	@SequenceGenerator(name = "SEQUENCE_PESSOAFISICA",sequenceName = "PESSOAFISICA_IDPESSOAFISICA_SEQ", allocationSize = 1)
 	@GeneratedValue(generator = "SEQUENCE_PESSOAFISICA", strategy = GenerationType.SEQUENCE)
 	private Long idPessoaFisica;
 	

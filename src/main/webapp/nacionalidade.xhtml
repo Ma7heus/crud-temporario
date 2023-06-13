@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    template="/WEB-INF/templates/default.xhtml">
+
+    <ui:define name="content">
+        <h:form id="dialogs">
+            <p:growl id="messages" showDetail="true" />
+
+            <!-- DIALOG ADICIONAR NACIONALIDADE -->
+            <p:dialog 
+            	header="Nova Nacionalidade" 
+            	modal="true" width="400" 
+            	widgetVar="nacionalidadeDialog"
+                responsive="true"
+             >
+                <h:panelGrid 
+                	columns="2" 
+                	cellpadding="5"
+                 >
+                    <h:outputLabel 
+                    	for="idNacionalidade" 
+                    	value="Código:" 
+                    />
+                    <p:inputText 
+                    	disabled="true"
+                    	id="idNacionalidade" 
+                    	value="#{nacionalidadeController.nacionalidade.idNacionalidade}" 
+                    />
+
+                    <h:outputLabel 
+                    	for="descricao" 
+                    	value="Descrição:" 
+                    />
+                    
+                    <p:inputText 
+                    	id="descricao" 
+                    	value="#{nacionalidadeController.nacionalidade.descricao}" 
+                    />
+                </h:panelGrid>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <p:commandButton 
+                    	value="Salvar" 
+                    	actionListener="#{nacionalidadeController.salvar}"
+                        update="form:dt-nacionalidades " 
+                        oncomplete="PF('nacionalidadeDialog').hide()"
+                        styleClass="ui-button-success" 
+                        style="margin-right: 10px;" 
+                      />
+
+                    <p:commandButton 
+                    	value="Cancelar" 
+                    	onclick="PF('nacionalidadeDialog').hide()" 
+                    	type="button"
+                        styleClass="ui-button-danger" 
+                     />
+                </div>
+                
+            </p:dialog>
+
+            <!-- DIALOG REMOVER NACIONALIDADE -->
+            <p:confirmDialog widgetVar="removerNacionalidadeDialog" showEffect="fade" width="300"
+                message="Deseja remover esta nacionalidade?" header="Confirm" severity="warn">
+              
+                <p:commandButton 
+                	value="Sim" 
+                	icon="pi pi-check"
+                    actionListener="#{nacionalidadeController.remover}"
+                    process="@this form:dt-nacionalidades" 
+                    update="form:dt-nacionalidades"
+                    oncomplete="PF('removerNacionalidadeDialog').hide()" 
+                 />
+                
+                <p:commandButton 
+                	value="Não" 
+                	type="button" 
+                	styleClass="ui-button-secondary" 
+                	icon="pi pi-times"
+                    onclick="PF('removerNacionalidadeDialog').hide()" 
+                 />
+            </p:confirmDialog>
+        </h:form>
+
+        <!-- FORM COM LISTAGEM DAS NACIONALIDADES CADASTRADAS -->
+        <h:form id="form">
+            <p:growl id="messages" showDetail="true" />
+
+            <p:toolbar>
+                <p:toolbarGroup>
+                    <p:commandButton 
+                    	value="Novo" 
+                    	icon="pi pi-plus" 
+                    	actionListener="#{nacionalidadeController.novoCadastro}"
+                        update="" 
+                        oncomplete="PF('nacionalidadeDialog').show()"
+                        styleClass="ui-button-success" style="margin-right: .5rem">
+                        <p:resetInput target=":dialogs:" />
+                    </p:commandButton>
+                </p:toolbarGroup>
+            </p:toolbar>
+
+            <p:dataTable 
+            	id="dt-nacionalidades" 
+            	rowKey="#{nacionalidade.idNacionalidade}"
+            	value="#{nacionalidadeController.nacionalidadeList}" 
+            	var="nacionalidade"
+                emptyMessage="Nenhuma nacionalidade cadastrada." 
+                paginator="true" 
+                rows="10" 
+                paginatorPosition="bottom"
+                rowsPerPageTemplate="5,10,15"
+                paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords}" 
+                responsive="true"
+                selectionMode="single" 
+                selection="#{nacionalidadeController.nacionalidadeSelecionada}">
+               
+                <p:column 
+                	headerText="Código" 
+                	sortBy="#{nacionalidade.idNacionalidade}" 
+                	filterBy="#{nacionalidade.idNacionalidade}">
+                    	<h:outputText value="#{nacionalidade.idNacionalidade}" />
+               	</p:column>
+               	
+                <p:column 
+                	headerText="Descrição" 
+                	sortBy="#{nacionalidade.descricao}"
+                    filterBy="#{nacionalidade.descricao}">
+                    	<h:outputText value="#{nacionalidade.descricao}" />
+                </p:column>
+                
+                <p:column style="width: 50px;">
+                    <p:commandButton 
+                    	icon="pi pi-pencil" 
+                    	title="Editar" 
+                    	update=":dialogs:"
+                        oncomplete="PF('nacionalidadeDialog').show()" 
+                        process="@this"
+                        actionListener="#{nacionalidadeController.salvar(nacionalidade)}" />
+                </p:column>
+                
+                <p:column style="width: 50px;">
+                    <p:commandButton 
+                    	icon="pi pi-trash" 
+                    	title="Remover" 
+                    	onclick="PF('removerNacionalidadeDialog').show()"
+                        process="@this" 
+                        update=":dialogs:">
+                      	  <p:confirm header="Confirm" 
+                        		message="Deseja remover esta nacionalidade?"
+                            	icon="pi pi-exclamation-triangle" />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

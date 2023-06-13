@@ -10,6 +10,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import br.com.uffs.dao.PessoaFisicaDAO;
 import br.com.uffs.dao.PessoaFisicaSemJpaDAO;
 import br.com.uffs.model.PessoaFisica;
 
@@ -21,6 +22,9 @@ public class PessoaFisicaController implements Serializable {
 	
 	@Inject
 	private PessoaFisicaSemJpaDAO pessoaFisicaDAO;
+	
+	@Inject
+	private PessoaFisicaDAO pessoaFisicaDAOComJpa;
 	
 	private List<PessoaFisica> pessoaFisicaList;
 	
@@ -37,9 +41,13 @@ public class PessoaFisicaController implements Serializable {
 	@PostConstruct
 	public void init() {
 		this.pessoaFisicaList = new ArrayList<>();		
-		this.pessoaFisicaList = pessoaFisicaDAO.listAll();
+		this.pessoaFisicaList = listarTodos();
 		this.isEditando = null;
 		this.textoConsulta = null;
+	}
+
+	private List<PessoaFisica> listarTodos() {
+		return pessoaFisicaDAOComJpa.buscarTodos();
 	}
 	
 	// chamadoao clicar no botao salvar
@@ -49,29 +57,20 @@ public class PessoaFisicaController implements Serializable {
 		}else {
 			cadastratNovo();			
 		}
-		this.pessoaFisicaList = pessoaFisicaDAO.listAll();
+		this.pessoaFisicaList = listarTodos();
 	}
 
 	private void editarExistente() {
-		Boolean editar = pessoaFisicaDAO.atualizar(this.pessoaFisica);
-		if(editar) {
-			System.out.println("Cliente atualizado nome: " + pessoaFisica.getNome());
-			this.pessoaFisica = pessoaFisicaDAO.findById(pessoaFisica.getIdPessoaFisica());
-		}
+		pessoaFisicaDAOComJpa.atualizar(this.pessoaFisica);
 	}
 
 	private void cadastratNovo() {
-		Boolean cadastrar = pessoaFisicaDAO.cadastrar(this.pessoaFisica);
-		if(cadastrar) {
-			System.out.println("Cliente salvo nome: " + pessoaFisica.getNome());
-			this.pessoaFisica = new PessoaFisica();
-		}
+		pessoaFisicaDAOComJpa.cadastrar(this.pessoaFisica);
 	}
 
 	public void remover() {
-		System.out.println("Remover");
-		pessoaFisicaDAO.deletar(this.pessoaFisica.getIdPessoaFisica());
-		this.pessoaFisicaList = pessoaFisicaDAO.listAll();
+		pessoaFisicaDAOComJpa.deletar(this.pessoaFisica.getIdPessoaFisica());
+		this.pessoaFisicaList = listarTodos();
 	}
 	
 	// CHAMADO AO ABRIR DIALOG ATUALIZAR
@@ -87,8 +86,6 @@ public class PessoaFisicaController implements Serializable {
 	}
 	
 	public void filtrar() {
-		System.out.println(txt1);
-		
 		if(Objects.nonNull(textoConsulta) || textoConsulta != "") {
 			System.out.println("Filtrando dados " + textoConsulta);
 			List<PessoaFisica> listaFiltrada = pessoaFisicaDAO.filtrar(textoConsulta.toLowerCase());
@@ -117,7 +114,6 @@ public class PessoaFisicaController implements Serializable {
 		return pessoaFisicaList;
 	}
 
-	
 	public void setPessoaFisicaList(List<PessoaFisica> pessoaFisicaList) {
 		this.pessoaFisicaList = pessoaFisicaList;
 	}
@@ -161,6 +157,14 @@ public class PessoaFisicaController implements Serializable {
 
 	public void setTxt1(String txt1) {
 		this.txt1 = txt1;
+	}
+
+	public PessoaFisicaDAO getPessoaFisicaDAOComJpa() {
+		return pessoaFisicaDAOComJpa;
+	}
+
+	public void setPessoaFisicaDAOComJpa(PessoaFisicaDAO pessoaFisicaDAOComJpa) {
+		this.pessoaFisicaDAOComJpa = pessoaFisicaDAOComJpa;
 	}
 	
 }
