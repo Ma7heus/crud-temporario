@@ -10,8 +10,10 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import br.com.uffs.dao.NacionalidadeDAO;
 import br.com.uffs.dao.PessoaFisicaDAO;
 import br.com.uffs.dao.PessoaFisicaSemJpaDAO;
+import br.com.uffs.model.Nacionalidade;
 import br.com.uffs.model.PessoaFisica;
 
 @Named
@@ -26,6 +28,9 @@ public class PessoaFisicaController implements Serializable {
 	@Inject
 	private PessoaFisicaDAO pessoaFisicaDAOComJpa;
 	
+	@Inject
+	private NacionalidadeDAO nacionalidadeDAO;
+	
 	private List<PessoaFisica> pessoaFisicaList;
 	
 	private PessoaFisica pessoaFisica;
@@ -35,6 +40,11 @@ public class PessoaFisicaController implements Serializable {
 	private String textoConsulta;
 	
 	private String generoSelecionado;
+	
+	private Nacionalidade nacionalidadeSelecionada;
+	
+	private List<Nacionalidade> nacionalidadesList = new ArrayList<>();
+	
 	
 	private String txt1;
 
@@ -69,7 +79,7 @@ public class PessoaFisicaController implements Serializable {
 	}
 
 	public void remover() {
-		pessoaFisicaDAOComJpa.deletar(this.pessoaFisica.getIdPessoaFisica());
+		pessoaFisicaDAOComJpa.deletar(pessoaFisica.getIdPessoaFisica());
 		this.pessoaFisicaList = listarTodos();
 	}
 	
@@ -83,6 +93,7 @@ public class PessoaFisicaController implements Serializable {
 	public void novoCadastro() {
 		isEditando = false;
 		this.pessoaFisica = new PessoaFisica();
+		//nacionalidadesList = getNacionalidadeDAO().buscarTodos();
 	}
 	
 	public void filtrar() {
@@ -165,6 +176,30 @@ public class PessoaFisicaController implements Serializable {
 
 	public void setPessoaFisicaDAOComJpa(PessoaFisicaDAO pessoaFisicaDAOComJpa) {
 		this.pessoaFisicaDAOComJpa = pessoaFisicaDAOComJpa;
+	}
+
+	public Nacionalidade getNacionalidadeSelecionada() {
+		return nacionalidadeSelecionada;
+	}
+
+	public void setNacionalidadeSelecionada(Nacionalidade nacionalidadeSelecionada) {
+		this.nacionalidadeSelecionada = nacionalidadeSelecionada;
+	}
+
+	public List<Nacionalidade> getNacionalidadesList() {
+		return nacionalidadesList;
+	}
+
+	public void setNacionalidadesList(List<Nacionalidade> nacionalidadesList) {
+		this.nacionalidadesList = nacionalidadesList;
+	}
+
+	public NacionalidadeDAO getNacionalidadeDAO() {
+		return nacionalidadeDAO;
+	}
+
+	public void setNacionalidadeDAO(NacionalidadeDAO nacionalidadeDAO) {
+		this.nacionalidadeDAO = nacionalidadeDAO;
 	}
 	
 }

@@ -91,6 +91,15 @@
 						</div>
 
 						<div class="ui-md-12">
+							<p:outputLabel for="Nacionalidade" value="Nacionalidade" />
+							<p:selectOneMenu id="group"
+								value="#{pessoaFisicaController.nacionalidadeSelecionada}">
+								<f:selectItem itemLabel="Select One" itemValue="" />
+								<f:selectItems value="#{pessoaFisicaController.nacionalidadesList}" />
+							</p:selectOneMenu>
+						</div>
+
+						<div class="ui-md-12">
 							<p:outputLabel for="endereco">Endereco</p:outputLabel>
 							<p:inputText id="endereco"
 								value="#{pessoaFisicaController.pessoaFisica.endereco}"
