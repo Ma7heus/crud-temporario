@@ -3,9 +3,13 @@ package br.com.uffs.model;
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 @Entity
@@ -35,6 +39,10 @@ public class PessoaFisica {
 	private String telefone;
 	
 	private String endereco;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "IDNACIONALIDADE", foreignKey = @ForeignKey(name="FK_NACIONALIDADE"))	
+	private Nacionalidade nacionalidade;
 
 	public Long getIdPessoaFisica() {
 		return idPessoaFisica;
@@ -122,6 +130,14 @@ public class PessoaFisica {
 
 	public void setEndereco(String endereco) {
 		this.endereco = endereco;
+	}
+
+	public Nacionalidade getNacionalidade() {
+		return nacionalidade;
+	}
+
+	public void setNacionalidade(Nacionalidade nacionalidade) {
+		this.nacionalidade = nacionalidade;
 	}
 	
 }

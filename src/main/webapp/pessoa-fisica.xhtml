@@ -91,15 +91,24 @@
 						</div>
 
 						<div class="ui-md-12">
-							<p:outputLabel for="Nacionalidade" value="Nacionalidade" />
-							<p:selectOneMenu id="group"
-								value="#{pessoaFisicaController.nacionalidadeSelecionada}">
+							<p:outputLabel for="@next" value="Nacionalidade" />
+							<p:selectOneMenu 
+								id="nacionalidade"
+								required="true"
+								value="#{pessoaFisicaController.idNacionalidade}">
 								<f:selectItem itemLabel="Select One" itemValue="" />
-								<f:selectItems value="#{pessoaFisicaController.nacionalidadesList}" />
+								<f:selectItems 
+									value="#{pessoaFisicaController.nacionalidadesList}" 
+									var="nacionalidade"
+									itemLabel="#{nacionalidade.descricao}"
+									itemValue="#{nacionalidade.idNacionalidade}"
+								/>
 							</p:selectOneMenu>
 						</div>
 
-						<div class="ui-md-12">
+
+
+						<div class="ui-md-12 md:col-4">
 							<p:outputLabel for="endereco">Endereco</p:outputLabel>
 							<p:inputText id="endereco"
 								value="#{pessoaFisicaController.pessoaFisica.endereco}"
@@ -168,6 +177,9 @@
 	                    style="margin-right: .5rem">
 	                    <p:resetInput target=":dialogs:usuario-conteudo-dialog" />
 	                </p:commandButton>
+	                
+	                <p:commandButton  value="Ir para nacionalidades" actionListener="#{pessoaFisicaController.redirecionarParaOutraPagina}" />
+	            
 	            </p:toolbarGroup>
 	        </p:toolbar>
 
@@ -189,7 +201,14 @@
 
 				</div>
 				
-			<p:dataTable id="dt-usuarios" var="pf" 
+			<p:dataTable 
+					id="dt-usuarios" 
+					var="pf" 
+					emptyMessage="Nenhum cliente cadastrado" 
+                 	paginator="true" 
+                	rows="10" 
+                	paginatorPosition="bottom"
+                	rowsPerPageTemplate="5,10,15"
 					value="#{pessoaFisicaController.pessoaFisicaList}">
 					<f:facet name="header">
 						<div>
@@ -241,18 +260,25 @@
 					<!-- 	            </p:column> -->
 
 					<p:column 
-						sortBy="#{pf.email}" 
-						filterBy="#{pf.email}"
-						headerText="E-mail">
-						<h:outputText value="#{pf.email}" />
+						sortBy="#{pf.nacionalidade.idNacionalidade}" 
+						filterBy="#{pf.nacionalidade.descricao}"
+						headerText="Ncionalidade">
+						<h:outputText value="#{pf.nacionalidade.descricao}" />
 					</p:column>
 
-					<p:column 
-						sortBy="#{pf.telefone}" 
-						filterBy="#{pf.telefone}"
-						headerText="Telefone">
-						<h:outputText value="#{pf.telefone}" />
-					</p:column>
+<!-- 					<p:column  -->
+<!-- 						sortBy="#{pf.email}"  -->
+<!-- 						filterBy="#{pf.email}" -->
+<!-- 						headerText="E-mail"> -->
+<!-- 						<h:outputText value="#{pf.email}" /> -->
+<!-- 					</p:column> -->
+
+<!-- 					<p:column  -->
+<!-- 						sortBy="#{pf.telefone}"  -->
+<!-- 						filterBy="#{pf.telefone}" -->
+<!-- 						headerText="Telefone"> -->
+<!-- 						<h:outputText value="#{pf.telefone}" /> -->
+<!-- 					</p:column> -->
 
 					<p:column>
 						<f:facet name="header">Opções</f:facet>

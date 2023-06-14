@@ -10,7 +10,7 @@ import javax.persistence.SequenceGenerator;
 public class Nacionalidade {
 	
 	@Id
-	@SequenceGenerator(name = "SEQUENCE_NACIONALIDADE",sequenceName = "IDNACIONALIDADE", allocationSize = 1)
+	@SequenceGenerator(name = "SEQUENCE_NACIONALIDADE",sequenceName = "NACIONALIDADE_IDNACIONALIDADE_SEQ", allocationSize = 1)
 	@GeneratedValue(generator = "SEQUENCE_NACIONALIDADE", strategy = GenerationType.SEQUENCE)
 	private Long idNacionalidade;
 	

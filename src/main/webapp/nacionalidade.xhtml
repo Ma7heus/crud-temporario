@@ -39,6 +39,7 @@
                     
                     <p:inputText 
                     	id="descricao" 
+                    	required="true"
                     	value="#{nacionalidadeController.nacionalidade.descricao}" 
                     />
                 </h:panelGrid>
@@ -101,7 +102,10 @@
                         styleClass="ui-button-success" style="margin-right: .5rem">
                         <p:resetInput target=":dialogs:" />
                     </p:commandButton>
-                </p:toolbarGroup>
+
+					<p:commandButton  value="Ir para Pessoa Física" actionListener="#{nacionalidadeController.redirecionarParaOutraPagina}" />
+
+				</p:toolbarGroup>
             </p:toolbar>
 
             <p:dataTable 
@@ -137,24 +141,23 @@
                 <p:column style="width: 50px;">
                     <p:commandButton 
                     	icon="pi pi-pencil" 
+                    	styleClass="edit-button rounded-button ui-button-success"
                     	title="Editar" 
                     	update=":dialogs:"
                         oncomplete="PF('nacionalidadeDialog').show()" 
                         process="@this"
-                        actionListener="#{nacionalidadeController.salvar(nacionalidade)}" />
+                        actionListener="#{nacionalidadeController.atualizar(nacionalidade)}" />
                 </p:column>
                 
                 <p:column style="width: 50px;">
-                    <p:commandButton 
-                    	icon="pi pi-trash" 
-                    	title="Remover" 
-                    	onclick="PF('removerNacionalidadeDialog').show()"
-                        process="@this" 
-                        update=":dialogs:">
-                      	  <p:confirm header="Confirm" 
-                        		message="Deseja remover esta nacionalidade?"
-                            	icon="pi pi-exclamation-triangle" />
-                    </p:commandButton>
+                    
+                    <p:commandButton icon="pi pi-trash"
+							class="rounded-button"
+							oncomplete="PF('removerNacionalidadeDialog').show()"
+							 process="@this">
+							<f:setPropertyActionListener value="#{nacionalidade}"
+								target="#{nacionalidadeController.nacionalidade}" />
+						</p:commandButton>
                 </p:column>
             </p:dataTable>
         </h:form>

@@ -1,11 +1,14 @@
 package br.com.uffs.controller;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.PostConstruct;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -48,9 +51,24 @@ public class NacionalidadeController implements Serializable {
 		getNacionalidadeDAO().deletar(nacionalidade.getIdNacionalidade());
 		atualizarListagem();
     }
+	
+	public void atualizar(Nacionalidade nacionalidade) {
+		this.nacionalidade = nacionalidade;
+	}
 
     public void novoCadastro() {
         nacionalidade = new Nacionalidade();
+    }
+    
+    public void redirecionarParaOutraPagina() {
+    	System.out.println("Redirecionando");
+        try {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = facesContext.getExternalContext();
+            externalContext.redirect("/crud_pessoa/pessoa-fisica.xhtml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
     private void atualizarListagem() {

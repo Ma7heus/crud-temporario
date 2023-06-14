@@ -1,11 +1,14 @@
 package br.com.uffs.controller;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.PostConstruct;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -43,6 +46,8 @@ public class PessoaFisicaController implements Serializable {
 	
 	private Nacionalidade nacionalidadeSelecionada;
 	
+	private Long idNacionalidade;
+	
 	private List<Nacionalidade> nacionalidadesList = new ArrayList<>();
 	
 	
@@ -52,6 +57,7 @@ public class PessoaFisicaController implements Serializable {
 	public void init() {
 		this.pessoaFisicaList = new ArrayList<>();		
 		this.pessoaFisicaList = listarTodos();
+		nacionalidadesList = getNacionalidadeDAO().buscarTodos();
 		this.isEditando = null;
 		this.textoConsulta = null;
 	}
@@ -60,7 +66,6 @@ public class PessoaFisicaController implements Serializable {
 		return pessoaFisicaDAOComJpa.buscarTodos();
 	}
 	
-	// chamadoao clicar no botao salvar
 	public void salvar() {
 		if (isEditando) {
 			editarExistente();
@@ -71,11 +76,18 @@ public class PessoaFisicaController implements Serializable {
 	}
 
 	private void editarExistente() {
+		popularNacionalidade();
 		pessoaFisicaDAOComJpa.atualizar(this.pessoaFisica);
 	}
 
 	private void cadastratNovo() {
+		popularNacionalidade();
 		pessoaFisicaDAOComJpa.cadastrar(this.pessoaFisica);
+	}
+
+	private void popularNacionalidade() {
+		nacionalidadeSelecionada = getNacionalidadeDAO().buscarById(idNacionalidade);
+		pessoaFisica.setNacionalidade(nacionalidadeSelecionada);
 	}
 
 	public void remover() {
@@ -86,7 +98,8 @@ public class PessoaFisicaController implements Serializable {
 	// CHAMADO AO ABRIR DIALOG ATUALIZAR
 	public void atualizar() {
 		isEditando = true;
-		System.out.println("Atualizando cliente");
+		//idNacionalidade = pessoaFisica.getNacionalidade().getIdNacionalidade();
+		System.out.println("Atualizando cliente" + pessoaFisica);
 	}
 	
 	//chamado ao abrir o dialog
@@ -103,6 +116,17 @@ public class PessoaFisicaController implements Serializable {
 			this.pessoaFisicaList = listaFiltrada;			
 		}
 	}
+	
+	public void redirecionarParaOutraPagina() {
+    	System.out.println("Redirecionando");
+        try {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = facesContext.getExternalContext();
+            externalContext.redirect("/crud_pessoa/nacionalidade.xhtml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 	
 	public List<String> getListaGeneros(String query) {
 		generoSelecionado = query;
@@ -200,6 +224,14 @@ public class PessoaFisicaController implements Serializable {
 
 	public void setNacionalidadeDAO(NacionalidadeDAO nacionalidadeDAO) {
 		this.nacionalidadeDAO = nacionalidadeDAO;
+	}
+
+	public Long getIdNacionalidade() {
+		return idNacionalidade;
+	}
+
+	public void setIdNacionalidade(Long idNacionalidade) {
+		this.idNacionalidade = idNacionalidade;
 	}
 	
 }
