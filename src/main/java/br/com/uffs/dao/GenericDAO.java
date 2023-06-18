@@ -27,29 +27,24 @@ public abstract class GenericDAO<T,ID> implements Serializable {
 	}
 	
 	public void cadastrar(T entidade) {
-		System.out.println("CADASTRANDO COM JPA");
 		entityManager.persist(entidade);
 	}
 	
 	public void atualizar(T entidade) {
-		System.out.println("ATUALIZANDO COM JPA");
 		entityManager.merge(entidade);
 	}
 	
 	public void deletar(ID idEntidade) {
-		System.out.println("DELETANDO COM JPA");
 		T entidade = entityManager.find(clazz, idEntidade);
 		entityManager.remove(entidade);
 	}
 	
 	public T buscarById(ID idEntidade) {
-		System.out.println("BUSCANDO POR ID COM JPA");
 		return entityManager.find(clazz, idEntidade);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<T> buscarTodos(){
-		System.out.println("buscando todos JPA");
 		return entityManager.createQuery(" select entidade from " + clazz.getSimpleName() 
 		+ " entidade ").getResultList();
 	}

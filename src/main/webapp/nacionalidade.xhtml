@@ -48,7 +48,7 @@
                     <p:commandButton 
                     	value="Salvar" 
                     	actionListener="#{nacionalidadeController.salvar}"
-                        update="form:dt-nacionalidades " 
+                        update="form:dt-nacionalidades messages" 
                         oncomplete="PF('nacionalidadeDialog').hide()"
                         styleClass="ui-button-success" 
                         style="margin-right: 10px;" 
@@ -73,7 +73,7 @@
                 	icon="pi pi-check"
                     actionListener="#{nacionalidadeController.remover}"
                     process="@this form:dt-nacionalidades" 
-                    update="form:dt-nacionalidades"
+                    update="form:dt-nacionalidades  messages"
                     oncomplete="PF('removerNacionalidadeDialog').hide()" 
                  />
                 

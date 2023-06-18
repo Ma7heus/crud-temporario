@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -14,7 +15,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.com.uffs.dao.NacionalidadeDAO;
+import br.com.uffs.dao.PessoaFisicaDAO;
 import br.com.uffs.model.Nacionalidade;
+import br.com.uffs.model.PessoaFisica;
 
 @Named
 @ViewScoped
@@ -29,6 +32,12 @@ public class NacionalidadeController implements Serializable {
 	@Inject
 	private NacionalidadeDAO nacionalidadeDAO;
 	
+	@Inject
+	private PessoaFisicaDAO pessoaFisicaDAO;
+	
+	@Inject
+	private FacesContext facesContext;
+	
     private List<Nacionalidade> nacionalidadeList;
 
     @PostConstruct
@@ -38,6 +47,7 @@ public class NacionalidadeController implements Serializable {
 	}
     
     public void salvar() {
+    	this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,	"Salvo com sucesso!",null));
     	if(Objects.isNull(nacionalidade.getIdNacionalidade())) {
     		getNacionalidadeDAO().cadastrar(nacionalidade);
     	} else {
@@ -48,9 +58,25 @@ public class NacionalidadeController implements Serializable {
     }
 
 	public void remover() {
-		getNacionalidadeDAO().deletar(nacionalidade.getIdNacionalidade());
-		atualizarListagem();
+		if(podeDeletar(nacionalidade.getIdNacionalidade())) {
+			getNacionalidadeDAO().deletar(nacionalidade.getIdNacionalidade());
+			this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Deletador com sucesso!",null));
+			atualizarListagem();
+		} else {
+			this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Erro ao deletar pois existem Pessoas Fisicas vinculadas a essa nacionalidade!",null));
+		}
+	
     }
+	
+	public Boolean podeDeletar(Long idNacionalidade) {
+		List<PessoaFisica> pessoaFisicaList = getPessoaFisicaDAO().findPessoaFisicaByNacionalidade(idNacionalidade);
+		if(pessoaFisicaList.size() == 0) {
+			return true;
+		}else {
+			return false;
+		}
+}
 	
 	public void atualizar(Nacionalidade nacionalidade) {
 		this.nacionalidade = nacionalidade;
@@ -110,6 +136,14 @@ public class NacionalidadeController implements Serializable {
 
 	public void setNacionalidadeSelecionada(Nacionalidade nacionalidadeSelecionada) {
 		this.nacionalidadeSelecionada = nacionalidadeSelecionada;
+	}
+
+	public PessoaFisicaDAO getPessoaFisicaDAO() {
+		return pessoaFisicaDAO;
+	}
+
+	public void setPessoaFisicaDAO(PessoaFisicaDAO pessoaFisicaDAO) {
+		this.pessoaFisicaDAO = pessoaFisicaDAO;
 	}
     
 }

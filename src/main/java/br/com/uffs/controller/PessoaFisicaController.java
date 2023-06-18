@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -33,6 +34,9 @@ public class PessoaFisicaController implements Serializable {
 	
 	@Inject
 	private NacionalidadeDAO nacionalidadeDAO;
+	
+	@Inject
+	private FacesContext facesContext;
 	
 	private List<PessoaFisica> pessoaFisicaList;
 	
@@ -72,6 +76,7 @@ public class PessoaFisicaController implements Serializable {
 		}else {
 			cadastratNovo();			
 		}
+		this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,	"Salvo com sucesso!",null));
 		this.pessoaFisicaList = listarTodos();
 	}
 
@@ -92,26 +97,26 @@ public class PessoaFisicaController implements Serializable {
 
 	public void remover() {
 		pessoaFisicaDAOComJpa.deletar(pessoaFisica.getIdPessoaFisica());
+		this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,	"Removido com sucesso!",null));
 		this.pessoaFisicaList = listarTodos();
 	}
 	
 	// CHAMADO AO ABRIR DIALOG ATUALIZAR
-	public void atualizar() {
+	public void atualizar(PessoaFisica pessoaFisica) {
 		isEditando = true;
-		//idNacionalidade = pessoaFisica.getNacionalidade().getIdNacionalidade();
-		System.out.println("Atualizando cliente" + pessoaFisica);
+		this.pessoaFisica = pessoaFisica;
+		this.idNacionalidade = pessoaFisica.getNacionalidade().getIdNacionalidade();
 	}
 	
 	//chamado ao abrir o dialog
-	public void novoCadastro() {
+	public void novoCadastro(PessoaFisica pessoaFisica) {
 		isEditando = false;
 		this.pessoaFisica = new PessoaFisica();
-		//nacionalidadesList = getNacionalidadeDAO().buscarTodos();
+		this.idNacionalidade = null;
 	}
 	
 	public void filtrar() {
 		if(Objects.nonNull(textoConsulta) || textoConsulta != "") {
-			System.out.println("Filtrando dados " + textoConsulta);
 			List<PessoaFisica> listaFiltrada = pessoaFisicaDAO.filtrar(textoConsulta.toLowerCase());
 			this.pessoaFisicaList = listaFiltrada;			
 		}

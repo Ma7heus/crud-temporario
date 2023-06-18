@@ -106,15 +106,12 @@
 							</p:selectOneMenu>
 						</div>
 
-
-
 						<div class="ui-md-12 md:col-4">
 							<p:outputLabel for="endereco">Endereco</p:outputLabel>
 							<p:inputText id="endereco"
 								value="#{pessoaFisicaController.pessoaFisica.endereco}"
 								required="true" />
 						</div>
-
 
 					</p:outputPanel>
 	            </p:outputPanel>
@@ -170,7 +167,7 @@
 	                <p:commandButton 
 	                	value="Novo" 
 	                	icon="pi pi-plus" 
-	                	actionListener="#{pessoaFisicaController.novoCadastro}"
+	                	actionListener="#{pessoaFisicaController.novoCadastro(pessoaFisica)}"
 	                    update=":dialogs:usuario-conteudo-dialog" 
 	                    oncomplete="PF('clienteDialog').show()"
 	                    styleClass="ui-button-success" 
@@ -281,20 +278,16 @@
 <!-- 					</p:column> -->
 
 					<p:column>
-						<f:facet name="header">Opções</f:facet>
-
-						<!--EDITAR USUARIO BOTAO-->
-						<p:commandButton icon="pi pi-pencil"
-							update=":dialogs:usuario-conteudo-dialog"
-							oncomplete="PF('clienteDialog').show()"
-							actionListener="#{pessoaFisicaController.atualizar}"
-							styleClass="edit-button rounded-button ui-button-success"
-							process="@this">
-
-							<f:setPropertyActionListener value="#{pf}"
-								target="#{pessoaFisicaController.pessoaFisica}" />
-							<p:resetInput target=":dialogs:usuario-conteudo-dialog" />
-						</p:commandButton>
+						<f:facet name="header">Opções</f:facet>			
+						
+						<p:commandButton 
+	                    	icon="pi pi-pencil" 
+	                    	styleClass="edit-button rounded-button ui-button-success"
+	                    	title="Editar" 
+	                    	update=":dialogs:usuario-conteudo-dialog"
+	                        oncomplete="PF('clienteDialog').show()"
+	                        process="@this"
+	                        actionListener="#{pessoaFisicaController.atualizar(pf)}" />
 
 						<!--EXCLUIR USUARIO BOTAO-->
 						<p:commandButton icon="pi pi-trash" process="@this"
